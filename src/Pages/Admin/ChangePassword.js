@@ -8,7 +8,7 @@ import * as yup from "yup";
 import api from "../../api/api";
 import AuthService from "../../auth_service";
 import ExeatContext from "../../ExeatContext";
-const Settings = () => {
+const ChangePassword = () => {
   const schema = yup.object().shape({
     new_password: yup.string().required("New Password Is Required"),
     old_password: yup.string().required("Old Password Is Required"),
@@ -222,4 +222,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default ChangePassword;

@@ -139,7 +139,6 @@ const Home = () => {
 
         <Box sx={{ pt: 10, pl: 5, pr: 5 }}>
           <Box
-            onClick={() => setOpenReport(true)}
             sx={{
               width: { xs: "300px", md: "450px" },
               height: "400px",

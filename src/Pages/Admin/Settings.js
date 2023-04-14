@@ -1,42 +1,12 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-const Settings = () => {
-  const schema = yup.object().shape({
-    username: yup.string().required("User Number Is Required"),
-    password: yup.string().required("Password Is Required"),
-  });
-  const [values, setValues] = useState({
-    password: "",
-    showPassword: false,
-  });
-  const [values2, setValues2] = useState({
-    password: "",
-    showPassword: false,
-  });
-  const [values3, setValues3] = useState({
-    password: "",
-    showPassword: false,
-  });
+import { Key, Password } from "@mui/icons-material";
+import { Box, Button, Typography } from "@mui/material";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-  const { handleSubmit, trigger, control } = useForm({
-    resolver: yupResolver(schema),
-  });
-  const handleShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
-  };
-  const handleShowPassword2 = () => {
-    setValues2({ ...values2, showPassword: !values2.showPassword });
-  };
-  const handleShowPassword3 = () => {
-    setValues3({ ...values3, showPassword: !values3.showPassword });
-  };
+const Settings = () => {
+  const navigate = useNavigate();
   return (
     <>
-      {" "}
       <Box
         sx={{
           backgroundColor: "#F1FFE7",
@@ -45,130 +15,86 @@ const Settings = () => {
           ml: { xs: "0", md: "230px" },
         }}
       >
-        <Box sx={{ padding: "4%", paddingTop: "6%" }}>
-          <Box
+        <Typography
+          sx={{
+            fontWeight: "700",
+            fontSize: "25px",
+            cursor: "pointer",
+            pl: 10,
+            pt: 5,
+          }}
+        >
+          Settings
+        </Typography>
+        <Box sx={{ p: 8 }}>
+          <Button
+            variant="contained"
             sx={{
               backgroundColor: "white",
-              height: "70vh",
-              borderRadius: "8px",
-              p: 5,
+              color: "black",
+
+              "&:hover": {
+                background: "#528265",
+              },
+            }}
+            startIcon={<Key size={15} />}
+            onClick={() => {
+              navigate("/admin/change-password");
             }}
           >
-            <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
-              Change Password
-            </Typography>
-            <Box sx={{ height: "68vh", width: "100%", mt: 8 }}>
-              <Controller
-                name="password"
-                control={control}
-                defaultValue=""
-                render={({
-                  field: { ref, ...fields },
-                  fieldState: { error },
-                }) => (
-                  <TextField
-                    id="password"
-                    label="Current Password"
-                    sx={{ mb: 4 }}
-                    type={values.showPassword ? "text" : "password"}
-                    {...fields}
-                    inputRef={ref}
-                    fullWidth
-                    error={Boolean(error?.message)}
-                    helperText={error?.message}
-                    onKeyUp={() => {
-                      trigger("password");
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton onClick={handleShowPassword}>
-                          {values.showPassword === true ? (
-                            <Visibility />
-                          ) : (
-                            <VisibilityOff />
-                          )}
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                )}
-              />
+            Change Password{" "}
+          </Button>
+          <Box sx={{ padding: "4%", paddingTop: "6%" }}>
+            <Box
+              sx={{
+                backgroundColor: "#528265",
+                height: "auto",
+                borderRadius: "8px",
+                p: 5,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: "700",
+                  fontSize: "20px",
 
-              <Controller
-                name="new_password"
-                control={control}
-                defaultValue=""
-                render={({
-                  field: { ref, ...fields },
-                  fieldState: { error },
-                }) => (
-                  <TextField
-                    id="new_password"
-                    label="New Password"
-                    sx={{ mb: 4 }}
-                    type={values2.showPassword ? "text" : "password"}
-                    {...fields}
-                    inputRef={ref}
-                    fullWidth
-                    error={Boolean(error?.message)}
-                    helperText={error?.message}
-                    onKeyUp={() => {
-                      trigger("new_password");
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton onClick={handleShowPassword2}>
-                          {values2.showPassword === true ? (
-                            <Visibility />
-                          ) : (
-                            <VisibilityOff />
-                          )}
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                )}
-              />
-
-              <Controller
-                name="confirm_password"
-                control={control}
-                defaultValue=""
-                render={({
-                  field: { ref, ...fields },
-                  fieldState: { error },
-                }) => (
-                  <TextField
-                    id="confirm_password"
-                    label="Confirm Password"
-                    sx={{ mb: 4 }}
-                    type={values3.showPassword ? "text" : "password"}
-                    {...fields}
-                    inputRef={ref}
-                    fullWidth
-                    error={Boolean(error?.message)}
-                    helperText={error?.message}
-                    onKeyUp={() => {
-                      trigger("confirm_password");
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton onClick={handleShowPassword3}>
-                          {values3.showPassword === true ? (
-                            <Visibility />
-                          ) : (
-                            <VisibilityOff />
-                          )}
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                )}
-              />
-
-              <Button variant="contained" color="primary">
-                Change
-              </Button>
+                  color: "white",
+                }}
+              >
+                About HallTrack
+              </Typography>
+              <Typography sx={{ color: "white", pt: 3 }}>
+                Etiam posuere vitae augue id rhoncus. Cras accumsan ex sit amet
+                tristique volutpat. Interdum et malesuada fames ac ante ipsum
+                primis in faucibus. In tincidunt, dui sit amet vulputate
+                interdum, massa risus imperdiet nibh, ut commodo metus nisi ac
+                dolor. Curabitur feugiat leo vel lorem aliquam elementum. Ut ut
+                elementum neque. Pellentesque habitant morbi tristique senectus
+                et netus et malesuada fames ac turpis egestas. Nunc posuere
+                consequat ante eu dapibus. Phasellus efficitur turpis non mauris
+                interdum blandit. Phasellus pharetra scelerisque quam, sed
+                maximus felis pulvinar nec. Nullam arcu felis, fringilla ac
+                bibendum et, bibendum sed urna. Praesent lobortis quam eu
+                pellentesque pellentesque. Ut sit amet mattis diam. Suspendisse
+                erat ex, eleifend vitae sodales sit amet, gravida eleifend mi.
+                Pellentesque justo lorem, aliquam sit amet dolor ac, faucibus
+                viverra nisi. Fusce ut justo metus. Etiam posuere vitae augue id
+                rhoncus. Cras accumsan ex sit amet tristique volutpat. Interdum
+                et malesuada fames ac ante ipsum primis in faucibus. In
+                tincidunt, dui sit amet vulputate interdum, massa risus
+                imperdiet nibh, ut commodo metus nisi ac dolor. Curabitur
+                feugiat leo vel lorem aliquam elementum. Ut ut elementum neque.
+                Pellentesque habitant morbi tristique senectus et netus et
+                malesuada fames ac turpis egestas. Nunc posuere consequat ante
+                eu dapibus. Phasellus efficitur turpis non mauris interdum
+                blandit. Phasellus pharetra scelerisque quam, sed maximus felis
+                pulvinar nec. Nullam arcu felis, fringilla ac bibendum et,
+                bibendum sed urna. Praesent lobortis quam eu pellentesque
+                pellentesque. Ut sit amet mattis diam. Suspendisse erat ex,
+                eleifend vitae sodales sit amet, gravida eleifend mi.
+                Pellentesque justo lorem, aliquam sit amet dolor ac, faucibus
+                viverra nisi. Fusce ut justo metus.
+              </Typography>
             </Box>
           </Box>
         </Box>

@@ -1,6 +1,6 @@
 import React from "react";
-import { Typography, Box } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { Typography, Box, Divider } from "@mui/material";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../Assets/Logo.png";
 import { ReactComponent as Reported } from "../Assets/scgs/reported.svg";
 import { ReactComponent as Unresolved } from "../Assets/scgs/unresolved.svg";
@@ -11,41 +11,39 @@ import { ReactComponent as CostAnalysis } from "../Assets/scgs/cost-analysis.svg
 import { ReactComponent as History } from "../Assets/scgs/history.svg";
 import { ReactComponent as Settings } from "../Assets/scgs/settings.svg";
 import { ReactComponent as Logout } from "../Assets/scgs/logout.svg";
+import { ReactComponent as Dashboard } from "../Assets/scgs/dashboard.svg";
+import { ReactComponent as Statistics } from "../Assets/scgs/statistics.svg";
+import { ReactComponent as Categories } from "../Assets/scgs/categories.svg";
+import { ReactComponent as Users } from "../Assets/scgs/users.svg";
+import api from "../api/api";
+import AuthService from "../auth_service";
 
 const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
+  const { getCurrentToken } = AuthService;
+  const navigate = useNavigate();
   const side = [
     {
       name: "Reported",
-      icon: <Reported />,
+      icon: <Reported style={{ width: "60%" }} />,
     },
     {
       name: "Unresolved",
-      icon: <Unresolved />,
+      icon: <Unresolved style={{ width: "60%" }} />,
     },
-    {
-      name: "Pending",
-      icon: <Pending />,
-    },
+
     {
       name: "Resolved",
-      icon: <Resolved />,
+      icon: <Resolved style={{ width: "60%" }} />,
     },
     {
       name: "Compile",
-      icon: <Compile />,
-    },
-    {
-      name: "Costing",
-      icon: <CostAnalysis />,
-    },
-    {
-      name: "History",
-      icon: <History />,
+      icon: <Compile style={{ width: "60%" }} />,
     },
   ];
   const handleClick = () => {
-    setMobileOpen(false);
+    mobileOpen && setMobileOpen(false);
   };
+
   return (
     <>
       <Box
@@ -54,7 +52,7 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
           justifyContent: "center",
           alignItems: "center",
           mt: 2,
-          mb: 5,
+          mb: 2,
           p: 1,
           borderBottom: "1px solid gray",
           outline: "none",
@@ -63,6 +61,76 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
         <img src={logo} style={{ width: "30%" }} alt="logo" />
       </Box>
       <Box>
+        <NavLink
+          to={`dashboard`}
+          style={({ isActive }) =>
+            isActive
+              ? {
+                  display: "flex",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  backgroundColor: "#528265",
+                  margin: "4%  8%",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+              : {
+                  textDecoration: "none",
+                  display: "flex",
+                  marginTop: "7px",
+                  margin: "4% 8%",
+                  borderRadius: "10px",
+                  marginBottom: "7px",
+                  background: "#F5F5F5",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+          }
+          onClick={() => handleClick()}
+        >
+          <Box
+            sx={{
+              textAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingTop: "3%",
+              pl: 5,
+              borderRadius: "10px",
+              paddingBottom: "3%",
+              "&:hover": {
+                background: "#528265",
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                pr: 2,
+              }}
+            >
+              <Dashboard style={{ width: "60%" }} />
+            </Typography>
+            <Typography
+              sx={{
+                color: "black",
+                fontWeight: "600",
+                fontSize: "13px",
+              }}
+            >
+              Dashboard
+            </Typography>
+          </Box>
+        </NavLink>
+        <Box sx={{ padding: "0 8%" }}>
+          <Typography sx={{ fontSize: "13px", color: "black" }}>
+            Reports
+          </Typography>
+          <Divider />
+        </Box>
         {side.map((text, index) => (
           <NavLink
             key={index}
@@ -71,9 +139,11 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
               isActive
                 ? {
                     display: "flex",
+                    alignItems: "center",
                     textDecoration: "none",
                     backgroundColor: "#528265",
-
+                    margin: "4%  8%",
+                    borderRadius: "10px",
                     textAlign: "center",
                     "&:hover": {
                       background: "#528265",
@@ -82,10 +152,14 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
                 : {
                     textDecoration: "none",
                     display: "flex",
+                    alignItems: "center",
                     marginTop: "7px",
+                    margin: "4% 8%",
+                    borderRadius: "10px",
                     marginBottom: "7px",
+                    background: "#F5F5F5",
                     "&:hover": {
-                      background: "gray",
+                      background: "#528265",
                     },
                   }
             }
@@ -99,10 +173,10 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
                 width: "100%",
                 paddingTop: "3%",
                 pl: 5,
-
+                borderRadius: "10px",
                 paddingBottom: "3%",
                 "&:hover": {
-                  background: "gray",
+                  background: "#528265",
                 },
               }}
             >
@@ -125,111 +199,270 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
             </Box>
           </NavLink>
         ))}
-        <Box sx={{ mt: 10 }}>
-          <NavLink
-            to={`settings`}
-            style={({ isActive }) =>
-              isActive
-                ? {
-                    display: "flex",
-                    textDecoration: "none",
-                    backgroundColor: "gray",
-
-                    textAlign: "center",
-                    "&:hover": {
-                      background: "gray",
-                    },
-                  }
-                : {
-                    textDecoration: "none",
-                    display: "flex",
-                    marginTop: "7px",
-                    marginBottom: "7px",
-                    "&:hover": {
-                      background: "gray",
-                    },
-                  }
-            }
-            onClick={() => handleClick()}
-          >
-            <Box
-              sx={{
-                textAlign: "center",
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                paddingTop: "3%",
-                pl: 5,
-
-                paddingBottom: "3%",
-                "&:hover": {
-                  background: "gray",
-                },
-              }}
-            >
-              <Typography
-                sx={{
-                  pr: 2,
-                }}
-              >
-                <Settings />
-              </Typography>
-              <Typography
-                sx={{
-                  color: "black",
-                  fontWeight: "600",
-                  fontSize: "13px",
-                }}
-              >
-                Settings
-              </Typography>
-            </Box>
-          </NavLink>{" "}
-          <NavLink
-            style={{
-              textDecoration: "none",
+        <Box sx={{ padding: "0 8%" }}>
+          <Typography sx={{ fontSize: "13px", color: "black" }}>
+            Manage
+          </Typography>
+          <Divider />
+        </Box>
+        <NavLink
+          to={`categories`}
+          style={({ isActive }) =>
+            isActive
+              ? {
+                  display: "flex",
+                  textDecoration: "none",
+                  backgroundColor: "#528265",
+                  margin: "4%  8%",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+              : {
+                  textDecoration: "none",
+                  display: "flex",
+                  marginTop: "7px",
+                  margin: "4% 8%",
+                  borderRadius: "10px",
+                  marginBottom: "7px",
+                  background: "#F5F5F5",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+          }
+          onClick={() => handleClick()}
+        >
+          <Box
+            sx={{
+              textAlign: "center",
               display: "flex",
-              marginTop: "7px",
-              marginBottom: "7px",
+              alignItems: "center",
+              width: "100%",
+              paddingTop: "3%",
+              pl: 5,
+              borderRadius: "10px",
+              paddingBottom: "3%",
               "&:hover": {
-                background: "gray",
+                background: "#528265",
               },
             }}
           >
-            <Box
+            <Typography
               sx={{
-                textAlign: "center",
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                paddingTop: "3%",
-                pl: 5,
-
-                paddingBottom: "3%",
-                "&:hover": {
-                  background: "gray",
-                },
+                pr: 2,
               }}
             >
-              <Typography
-                sx={{
-                  pr: 2,
-                }}
-              >
-                <Logout />
-              </Typography>
-              <Typography
-                sx={{
-                  color: "black",
-                  fontWeight: "600",
-                  fontSize: "13px",
-                }}
-              >
-                Logout
-              </Typography>
-            </Box>
-          </NavLink>
+              <Categories style={{ width: "60%" }} />
+            </Typography>
+            <Typography
+              sx={{
+                color: "black",
+                fontWeight: "600",
+                fontSize: "13px",
+              }}
+            >
+              Categories
+            </Typography>
+          </Box>
+        </NavLink>
+        <NavLink
+          to={`users`}
+          style={({ isActive }) =>
+            isActive
+              ? {
+                  display: "flex",
+                  textDecoration: "none",
+                  backgroundColor: "#528265",
+                  margin: "4%  8%",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+              : {
+                  textDecoration: "none",
+                  display: "flex",
+                  marginTop: "7px",
+                  margin: "4% 8%",
+                  borderRadius: "10px",
+                  marginBottom: "7px",
+                  background: "#F5F5F5",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+          }
+          onClick={() => handleClick()}
+        >
+          <Box
+            sx={{
+              textAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingTop: "3%",
+              pl: 5,
+              borderRadius: "10px",
+              paddingBottom: "3%",
+              "&:hover": {
+                background: "#528265",
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                pr: 2,
+              }}
+            >
+              <Users style={{ width: "60%" }} />
+            </Typography>
+            <Typography
+              sx={{
+                color: "black",
+                fontWeight: "600",
+                fontSize: "13px",
+              }}
+            >
+              Users
+            </Typography>
+          </Box>
+        </NavLink>
+        <Box sx={{ padding: "0 8%" }}>
+          <Typography sx={{ fontSize: "13px", color: "black" }}>
+            Analytics
+          </Typography>
+          <Divider />
         </Box>
+        <NavLink
+          to={`statistics`}
+          style={({ isActive }) =>
+            isActive
+              ? {
+                  display: "flex",
+                  textDecoration: "none",
+                  backgroundColor: "#528265",
+                  margin: "4%  8%",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+              : {
+                  textDecoration: "none",
+                  display: "flex",
+                  marginTop: "7px",
+                  margin: "4% 8%",
+                  borderRadius: "10px",
+                  marginBottom: "7px",
+                  background: "#F5F5F5",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+          }
+          onClick={() => handleClick()}
+        >
+          <Box
+            sx={{
+              textAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingTop: "3%",
+              pl: 5,
+              borderRadius: "10px",
+              paddingBottom: "3%",
+              "&:hover": {
+                background: "#528265",
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                pr: 2,
+              }}
+            >
+              <Statistics style={{ width: "60%" }} />
+            </Typography>
+            <Typography
+              sx={{
+                color: "black",
+                fontWeight: "600",
+                fontSize: "13px",
+              }}
+            >
+              Statistics
+            </Typography>
+          </Box>
+        </NavLink>
+        <NavLink
+          to={`history`}
+          style={({ isActive }) =>
+            isActive
+              ? {
+                  display: "flex",
+                  textDecoration: "none",
+                  backgroundColor: "#528265",
+                  margin: "4%  8%",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+              : {
+                  textDecoration: "none",
+                  display: "flex",
+                  marginTop: "7px",
+                  margin: "4% 8%",
+                  borderRadius: "10px",
+                  marginBottom: "7px",
+                  background: "#F5F5F5",
+                  "&:hover": {
+                    background: "#528265",
+                  },
+                }
+          }
+          onClick={() => handleClick()}
+        >
+          <Box
+            sx={{
+              textAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingTop: "3%",
+              pl: 5,
+              borderRadius: "10px",
+              paddingBottom: "3%",
+              "&:hover": {
+                background: "#528265",
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                pr: 2,
+              }}
+            >
+              <History style={{ width: "60%" }} />
+            </Typography>
+            <Typography
+              sx={{
+                color: "black",
+                fontWeight: "600",
+                fontSize: "13px",
+              }}
+            >
+              History
+            </Typography>
+          </Box>
+        </NavLink>
       </Box>
     </>
   );

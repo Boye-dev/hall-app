@@ -1,16 +1,22 @@
 // import api from "../api/products";
-const logout = async () => {
-  localStorage.removeItem("user");
-  try {
-    const res = await fetch("/api/logout");
-    return await res.json();
-  } catch (err) {}
-};
+// const logout = async () => {
+//   localStorage.removeItem("user");
+//   try {
+//     const res = await fetch("/api/logout");
+//     return await res.json();
+//   } catch (err) {}
+// };
 const getCurrentAdmin = () => {
   return getWithExpiry("user");
 };
 const getCurrentUser = () => {
   return getWithExpiry("user");
+};
+const getCurrentType = () => {
+  return getWithExpiry("type");
+};
+const getCurrentToken = () => {
+  return getWithExpiry("token");
 };
 const setWithExpiry = (key, value, duration = 1000 * 60 * 60 * 2) => {
   const now = new Date();
@@ -42,11 +48,13 @@ const getWithExpiry = (key) => {
 };
 
 const AuthService = {
-  logout,
+  // logout,
   getCurrentAdmin,
   setWithExpiry,
   getWithExpiry,
   getCurrentUser,
+  getCurrentType,
+  getCurrentToken,
   // logoutUser,
 };
 

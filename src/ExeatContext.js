@@ -1,8 +1,6 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { Snackbar } from "@mui/material";
 import AuthService from "./auth_service";
-import { io } from "socket.io-client";
-
 const ExeatContext = createContext();
 export const ExeatProvider = ({ children }) => {
   const [isSnackOpen, setIsSnackOpen] = useState(false);
@@ -17,21 +15,11 @@ export const ExeatProvider = ({ children }) => {
 
   const currenUser = getCurrentUser();
 
-  const socketRef = useRef();
-
-  useEffect(() => {
-    socketRef.current = io("ws://localhost:3000");
-  }, []);
-  useEffect(() => {
-    socketRef.current.emit("addUser", currenUser?._id);
-    socketRef.current.on("getUsers", (users) => {});
-  }, [currenUser]);
   return (
     <ExeatContext.Provider
       value={{
         setIsSnackOpen,
         setSnackMessage,
-        socketRef,
         snackColor,
         setSnackColor,
         convoData,

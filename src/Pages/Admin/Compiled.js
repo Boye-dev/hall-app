@@ -1,7 +1,8 @@
+import { Delete, Print } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const columns = [
   {
     field: "issue",
@@ -20,32 +21,37 @@ const columns = [
   },
 
   {
-    field: "status",
+    field: "resolved",
     headerName: "Status",
     width: 110,
     renderCell: (cellValues) => (
       <Typography
         sx={{
-          backgroundColor:
-            cellValues.row.status === "resolved"
-              ? "green"
-              : cellValues.row.status === "unresolved"
-              ? "red"
-              : "gray",
+          backgroundColor: cellValues.row.resolved ? "green" : "red",
           borderRadius: "5px",
           p: 1,
           color: "white",
           fontSize: "12px",
         }}
       >
-        {cellValues.row.status}
+        {cellValues.row.resolved ? "Resolved" : "Unresolved"}
       </Typography>
     ),
   },
   {
-    field: "date",
+    field: "date_added",
     headerName: "Date",
     width: 150,
+    renderCell: (cellValues) => {
+      const date = new Date(cellValues.row.date_added);
+      return (
+        <Typography>
+          {`${date.getFullYear()}/${
+            date.getMonth() > 9 ? date.getMonth() : `0${date.getMonth()}`
+          }/${date.getDate()}`}
+        </Typography>
+      );
+    },
   },
   {
     field: "view",
@@ -64,18 +70,26 @@ const columns = [
   },
 ];
 const Compiled = () => {
-  const [compile, setCompiled] = useState([
-    {
-      id: "1",
-      issue: "Bad Locker",
-      category: "Capentry",
-      room: "SF 11",
-      status: "resolved",
-      date: "05/01/2023",
-    },
-  ]);
-
-  const rows = compile;
+  const location = useLocation();
+  const [selectedCheckbox, setSelected] = useState([]);
+  const [data, setData] = useState(location.state);
+  const navigate = useNavigate();
+  const onRowsSelectionHandler = (ids) => {
+    const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
+    setSelected(selectedRowsData);
+    console.log(selectedRowsData);
+  };
+  const rows = data;
+  const handleRemove = () => {
+    const activeIds = [];
+    selectedCheckbox.map((item) => activeIds.push(item.id));
+    setData(data.filter((item) => activeIds.indexOf(item.id) === -1));
+  };
+  useEffect(() => {
+    navigate("/admin/compile/compiled", {
+      state: data,
+    });
+  }, [data, navigate]);
   return (
     <>
       <Box
@@ -95,9 +109,43 @@ const Compiled = () => {
               p: 5,
             }}
           >
-            <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
-              Selected issues
-            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
+                Selected issues
+              </Typography>
+              <Box>
+                <Button
+                  variant="contained"
+                  startIcon={<Print />}
+                  disabled={data.length < 1}
+                  onClick={() =>
+                    navigate("/admin/print", {
+                      state: data,
+                    })
+                  }
+                  sx={{
+                    backgroundColor: "#528265",
+
+                    "&:hover": {
+                      background: "#528265",
+                    },
+                  }}
+                >
+                  Print report
+                </Button>
+                <Button
+                  sx={{ ml: 2 }}
+                  variant="contained"
+                  color="error"
+                  disabled={selectedCheckbox.length < 1}
+                  startIcon={<Delete />}
+                  onClick={handleRemove}
+                >
+                  Remove selected
+                </Button>
+              </Box>
+            </Box>
+
             <Box sx={{ height: "68vh", width: "100%", mt: 2 }}>
               <DataGrid
                 getRowId={(row) => row.id}
@@ -107,12 +155,8 @@ const Compiled = () => {
                 pageSize={10}
                 rowsPerPageOptions={[5]}
                 disableSelectionOnClick
+                onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
               />
-            </Box>
-            <Box sx={{ textAlign: "right", mt: 5 }}>
-              <Button color="primary" variant="contained">
-                Generate Report
-              </Button>
             </Box>
           </Box>
         </Box>

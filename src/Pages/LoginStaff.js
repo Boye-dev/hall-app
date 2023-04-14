@@ -26,7 +26,7 @@ const Login = () => {
     username: yup.string().required("User Number Is Required"),
     password: yup.string().required("Password Is Required"),
   });
-  const { setWithExpiry, getCurrentAdmin } = AuthService;
+  const { setWithExpiry, getCurrentType } = AuthService;
   const { handleSubmit, trigger, control } = useForm({
     resolver: yupResolver(schema),
   });
@@ -41,17 +41,30 @@ const Login = () => {
 
       const config = {
         headers: { "Content-Type": "application/json" },
-        withCredentials: true,
+        // withCredentials: true,
       };
       const body = data;
 
-      const res = await api.post("/api/staff-login", body, config);
-
-      const adminData = res.data.staff;
-      setWithExpiry("user", adminData);
-      if (adminData.role === "Staff") {
-        navigate("/staff/patients");
+      const res = await api.post("/account/login/", body, config);
+      console.log(res);
+      setWithExpiry("token", res.data.token);
+      setWithExpiry("type", res.data.type);
+      if (res.data.type === "admin") {
+        navigate("/admin");
       }
+      // if (res) {
+      //   const user = await api.get("/account/manage/", {
+      //     headers: {
+      //       Authorization: `token ${res.data.token}`,
+      //     },
+      //   });
+      //   console.log(user, res.data);
+      // }
+
+      //   setWithExpiry("user", adminData);
+      //   if (adminData.role === "Patient") {
+      //     navigate("/patient/faq");
+      //   }
     } catch (err) {
       if (!err.response) {
         setLoading(false);
@@ -59,7 +72,7 @@ const Login = () => {
         setSnackMessage("Server Is Not Responding");
         setIsSnackOpen(true);
       } else if (err.response) {
-        setSnackMessage(err.response.data.error);
+        setSnackMessage(err.response.data.non_field_errors);
         setIsSnackOpen(true);
 
         setLoading(false);
@@ -76,14 +89,14 @@ const Login = () => {
 
   return (
     <>
-      {getCurrentAdmin() ? (
-        getCurrentAdmin()?.role === "Staff" ? (
+      {getCurrentType() ? (
+        getCurrentType() === "admin" ? (
           <>
-            <Navigate to="/staff" replace={true} />
+            <Navigate to="/admin" replace={true} />
           </>
         ) : (
           <>
-            <Navigate to="/patient" replace={true} />
+            <Navigate to="/senator" replace={true} />
           </>
         )
       ) : (
@@ -146,7 +159,7 @@ const Login = () => {
                   <TextField
                     variant="outlined"
                     sx={{ mb: 4 }}
-                    label="User Number"
+                    label="UserName"
                     fullWidth
                     {...fields}
                     inputRef={ref}
@@ -213,17 +226,6 @@ const Login = () => {
                   <span>Sign In</span>
                 </LoadingButton>
               </Box>
-              <Typography
-                sx={{
-                  color: "gray",
-                  textDecoration: "underline",
-                  fontSize: "12px",
-                  mb: 2,
-                  textAlign: "center",
-                }}
-              >
-                Sign in as an Admin
-              </Typography>
             </Box>
           </Box>
         </Box>

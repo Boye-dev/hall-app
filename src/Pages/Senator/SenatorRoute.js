@@ -1,10 +1,10 @@
 import { Navigate, useLocation, Outlet } from "react-router-dom";
 import AuthService from "../../auth_service";
-const { getCurrentAdmin } = AuthService;
+const { getCurrentType } = AuthService;
 const SenatorRoute = () => {
   const location = useLocation();
 
-  return true ? (
+  return getCurrentType() === "senator" ? (
     <Outlet />
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

@@ -1,3 +1,4 @@
+import { Delete, ThumbUpSharp } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useState } from "react";
@@ -95,9 +96,35 @@ const Pending = () => {
               p: 5,
             }}
           >
-            <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
-              Pending Issues
-            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
+                Pending Issues
+              </Typography>
+              <Box>
+                <Button
+                  variant="contained"
+                  startIcon={<ThumbUpSharp />}
+                  sx={{
+                    backgroundColor: "#528265",
+
+                    "&:hover": {
+                      background: "#528265",
+                    },
+                  }}
+                >
+                  Resolve selected
+                </Button>
+                <Button
+                  sx={{ ml: 2 }}
+                  variant="contained"
+                  color="error"
+                  startIcon={<Delete />}
+                >
+                  Delete selected
+                </Button>
+              </Box>
+            </Box>
+
             <Box sx={{ height: "68vh", width: "100%", mt: 2 }}>
               <DataGrid
                 getRowId={(row) => row.id}
