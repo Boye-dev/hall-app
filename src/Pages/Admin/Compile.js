@@ -183,6 +183,7 @@ const Compile = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   height: "auto",
+                  flexWrap: "wrap",
                 }}
               >
                 <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
@@ -209,7 +210,7 @@ const Compile = () => {
                     Generate report
                   </Button>
                   <Button
-                    sx={{ ml: 2 }}
+                    sx={{ ml: { xs: 0, md: 2 }, mt: { xs: 2, md: 0 } }}
                     variant="contained"
                     color="error"
                     disabled={deleted || selectedCheckbox.length < 1}

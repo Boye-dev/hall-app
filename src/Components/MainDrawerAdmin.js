@@ -24,20 +24,20 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
   const side = [
     {
       name: "Reported",
-      icon: <Reported style={{ width: "60%" }} />,
+      icon: <Reported />,
     },
     {
       name: "Unresolved",
-      icon: <Unresolved style={{ width: "60%" }} />,
+      icon: <Unresolved />,
     },
 
     {
       name: "Resolved",
-      icon: <Resolved style={{ width: "60%" }} />,
+      icon: <Resolved />,
     },
     {
       name: "Compile",
-      icon: <Compile style={{ width: "60%" }} />,
+      icon: <Compile />,
     },
   ];
   const handleClick = () => {
@@ -112,7 +112,7 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
                 pr: 2,
               }}
             >
-              <Dashboard style={{ width: "60%" }} />
+              <Dashboard />
             </Typography>
             <Typography
               sx={{
@@ -255,7 +255,7 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
                 pr: 2,
               }}
             >
-              <Categories style={{ width: "60%" }} />
+              <Categories />
             </Typography>
             <Typography
               sx={{
@@ -318,7 +318,7 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
                 pr: 2,
               }}
             >
-              <Users style={{ width: "60%" }} />
+              <Users />
             </Typography>
             <Typography
               sx={{
@@ -387,7 +387,7 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
                 pr: 2,
               }}
             >
-              <Statistics style={{ width: "60%" }} />
+              <Statistics />
             </Typography>
             <Typography
               sx={{
@@ -450,7 +450,7 @@ const MainDrawerAdmin = ({ setMobileOpen, mobileOpen }) => {
                 pr: 2,
               }}
             >
-              <History style={{ width: "60%" }} />
+              <History />
             </Typography>
             <Typography
               sx={{

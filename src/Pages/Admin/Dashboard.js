@@ -154,7 +154,7 @@ const Dashboard = () => {
                 height: "200px",
                 borderRadius: "10px",
                 p: 2,
-                m: 1,
+
                 display: "flex",
                 justifyContent: "space-between",
               }}
@@ -200,7 +200,7 @@ const Dashboard = () => {
                 height: "200px",
                 borderRadius: "10px",
                 p: 2,
-                m: 1,
+
                 display: "flex",
                 justifyContent: "space-between",
               }}
@@ -235,7 +235,7 @@ const Dashboard = () => {
                   flexWrap: "wrap",
                 }}
               >
-                <Box sx={{ width: "100%" }}>
+                <Box sx={{ width: "90%" }}>
                   <Typography sx={{ fontWeight: "700", fontSize: "15px" }}>
                     Reported issue trend
                   </Typography>
@@ -259,7 +259,7 @@ const Dashboard = () => {
                   flexWrap: "wrap",
                 }}
               >
-                <Box sx={{ width: "100%" }}>
+                <Box sx={{ width: "90%" }}>
                   <Typography sx={{ fontWeight: "700", fontSize: "15px" }}>
                     Total Reported Issues by Category
                   </Typography>

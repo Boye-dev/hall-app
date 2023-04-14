@@ -29,11 +29,11 @@ const PrintPreview = () => {
           Print Preview
         </Typography>
 
-        <Box sx={{ pl: 10, pt: 5, pb: 10 }}>
+        <Box sx={{ pl: 5, pt: 5, pb: 10 }}>
           <Box
             ref={componentRef}
             sx={{
-              width: { xs: "100%", md: "50%" },
+              width: { xs: "70%", md: "50%" },
               p: 5,
               height: "auto",
               backgroundColor: "white",

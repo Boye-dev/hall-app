@@ -154,7 +154,7 @@ const Statistics = () => {
           >
             Statistics
           </Typography>
-          <Box sx={{ p: 8 }}>
+          <Box sx={{ p: 3 }}>
             <Box
               sx={{
                 backgroundColor: "white",
@@ -290,7 +290,9 @@ const Statistics = () => {
                       }}
                     >
                       <Typography>
-                        {Object.values(line).reduce((a, b) => a + b, 0) / 12}
+                        {Math.round(
+                          Object.values(line).reduce((a, b) => a + b, 0) / 12
+                        )}
                       </Typography>
                     </Box>
                   </Box>
@@ -299,7 +301,7 @@ const Statistics = () => {
             </Box>
           </Box>
 
-          <Box sx={{ p: 8 }}>
+          <Box sx={{ p: 3 }}>
             <Box
               sx={{
                 backgroundColor: "white",
@@ -428,7 +430,7 @@ const Statistics = () => {
             </Box>
           </Box>
 
-          <Box sx={{ p: 8 }}>
+          <Box sx={{ p: 3 }}>
             <Box
               sx={{
                 backgroundColor: "white",

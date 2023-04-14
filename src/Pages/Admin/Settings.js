@@ -26,7 +26,7 @@ const Settings = () => {
         >
           Settings
         </Typography>
-        <Box sx={{ p: 8 }}>
+        <Box sx={{ p: 3 }}>
           <Button
             variant="contained"
             sx={{
@@ -44,7 +44,7 @@ const Settings = () => {
           >
             Change Password{" "}
           </Button>
-          <Box sx={{ padding: "4%", paddingTop: "6%" }}>
+          <Box sx={{ padding: "1%", paddingTop: "6%" }}>
             <Box
               sx={{
                 backgroundColor: "#528265",

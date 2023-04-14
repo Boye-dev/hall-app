@@ -211,12 +211,18 @@ const Unresolved = () => {
             <Box
               sx={{
                 backgroundColor: "white",
-                height: "70vh",
+                minHeight: "70vh",
                 borderRadius: "8px",
                 p: 5,
               }}
             >
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                }}
+              >
                 <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
                   Unresolved Issues
                 </Typography>
@@ -243,7 +249,7 @@ const Unresolved = () => {
                     Resolve selected
                   </Button>
                   <Button
-                    sx={{ ml: 2 }}
+                    sx={{ ml: { xs: 0, md: 2 }, mt: { xs: 2, md: 0 } }}
                     variant="contained"
                     color="error"
                     disabled={deleted || selectedCheckbox.length < 1}

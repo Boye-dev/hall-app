@@ -112,7 +112,7 @@ const MainDrawer = ({ setMobileOpen, mobileOpen }) => {
                 pr: 2,
               }}
             >
-              <Dashboard style={{ width: "60%" }} />
+              <Dashboard style={{}} />
             </Typography>
             <Typography
               sx={{

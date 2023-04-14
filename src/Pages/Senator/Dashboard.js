@@ -57,7 +57,7 @@ const Dashboard = () => {
           sx={{
             backgroundColor: "#F1FFE7",
 
-            height: "100vh",
+            minHeight: "100vh",
             ml: { xs: "0", md: "230px" },
           }}
         >

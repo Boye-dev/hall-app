@@ -12,7 +12,7 @@ import Pending from "./Pending";
 import PrintPreview from "./PrintPreview";
 import Reported from "./Reported";
 import Resolved from "./Resolved";
-import Settings from "./ChangePassword";
+import Settings from "./Settings";
 import SingleIssue from "./SingleIssue";
 import Statistics from "./Statistics";
 import Unresolved from "./Unresolved";
