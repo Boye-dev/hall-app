@@ -60,7 +60,7 @@ const columns = [
     width: 150,
     renderCell: (cellValues) => (
       <Link
-        to={`/admin/resolved/${cellValues.row.id}`}
+        to={`/senator/resolved/${cellValues.row.id}`}
         style={{ textDecoration: "none" }}
       >
         <Button sx={{}} variant="text" color="primary">
@@ -143,7 +143,7 @@ const Resolved = () => {
                 <DataGrid
                   getRowId={(row) => row.id}
                   rows={rows}
-                  checkboxSelection
+                  // checkboxSelection
                   columns={columns}
                   pageSize={10}
                   rowsPerPageOptions={[5]}

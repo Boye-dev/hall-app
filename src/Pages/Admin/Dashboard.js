@@ -22,6 +22,7 @@ const Dashboard = () => {
     labels: Object.keys(line),
     datasets: [
       {
+        label: "Issue",
         data: Object.values(line),
         borderColor: "rgb(82,130,101)",
         backgroundColor: "rgba(82,130,101,0.5)",

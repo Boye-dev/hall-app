@@ -141,7 +141,6 @@ const Reported = () => {
                 <DataGrid
                   getRowId={(row) => row.id}
                   rows={rows}
-                  checkboxSelection
                   columns={columns}
                   pageSize={10}
                   rowsPerPageOptions={[5]}

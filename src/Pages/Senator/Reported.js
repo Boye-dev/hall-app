@@ -1,4 +1,10 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TablePagination,
+  Typography,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -60,7 +66,7 @@ const columns = [
     width: 150,
     renderCell: (cellValues) => (
       <Link
-        to={`/admin/reported/${cellValues.row.id}`}
+        to={`/senator/reported/${cellValues.row.id}`}
         style={{ textDecoration: "none" }}
       >
         <Button sx={{}} variant="text" color="primary">
@@ -72,19 +78,33 @@ const columns = [
 ];
 const Reported = () => {
   const [reported, setReported] = useState([]);
+  const [totalRows, setTotalRows] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const { getCurrentToken } = AuthService;
-
+  const [page, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const handlePageChange = (params) => {
+    setLoading(true);
+    if (params >= Math.ceil(totalRows / pageSize) - 1) {
+      setCurrentPage(Math.ceil(totalRows / pageSize) - 1);
+    } else {
+      setCurrentPage(params);
+    }
+  };
 
   const fetchReports = async () => {
     try {
-      const response = await api.get("/reports/", {
+      const response = await api.get(`/reports/?q=${page + 1}`, {
         headers: {
           Authorization: `token ${getCurrentToken()}`,
         },
       });
 
-      if (response) setReported(response.data.results);
+      if (response) {
+        setReported(response.data.results);
+        setTotalRows(response.data.count);
+      }
 
       setLoading(false);
     } catch (error) {
@@ -96,11 +116,12 @@ const Reported = () => {
       }
     }
   };
+  // console.log(reported);
+
   useEffect(() => {
     fetchReports();
-  }, []);
+  }, [page]);
 
-  const rows = reported;
   return (
     <>
       {loading ? (
@@ -140,12 +161,14 @@ const Reported = () => {
               <Box sx={{ height: "68vh", width: "100%", mt: 2 }}>
                 <DataGrid
                   getRowId={(row) => row.id}
-                  rows={rows}
-                  checkboxSelection
+                  rowCount={totalRows}
+                  pagination
+                  rows={reported}
                   columns={columns}
-                  pageSize={10}
-                  rowsPerPageOptions={[5]}
+                  pageSize={pageSize}
+                  onPageChange={handlePageChange}
                   disableSelectionOnClick
+                  paginationMode="server"
                 />
               </Box>
             </Box>

@@ -152,7 +152,8 @@ const Sidebar = (props) => {
         setCreate(false);
         setOpenReport(false);
         setSnapshot();
-        navigate("/senator/dashboard");
+        document.location.reload();
+        // navigate("/senator/reported");
       }
     } catch (error) {
       if (error.response) {
