@@ -74,10 +74,20 @@ const columns = [
 ];
 const Unresolved = () => {
   const [unresolved, setUnresolved] = useState([]);
-  const { getCurrentToken } = AuthService;
+
   const { setIsSnackOpen, setSnackMessage, setSnackColor } =
     useContext(ExeatContext);
+  const [totalRows, setTotalRows] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const { getCurrentToken } = AuthService;
+  const [page, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const handlePageChange = (params) => {
+    setLoading(true);
+    setCurrentPage(params);
+  };
+
   const [deleted, setDeleted] = useState(false);
   const [resolve, setResolve] = useState(false);
   const [selectedCheckbox, setSelected] = useState([]);
@@ -162,12 +172,17 @@ const Unresolved = () => {
         headers: {
           Authorization: `token ${getCurrentToken()}`,
         },
+        params: {
+          q: page + 1,
+        },
       });
 
-      if (response)
+      if (response) {
         setUnresolved(
           response.data.results.filter((item) => item.resolved === false)
         );
+        setTotalRows(response.data.count);
+      }
 
       setLoading(false);
     } catch (error) {
@@ -181,11 +196,11 @@ const Unresolved = () => {
   };
   useEffect(() => {
     fetchReports();
-  }, [refetch]);
+  }, [refetch, page]);
   const rows = unresolved;
   return (
     <>
-      {loading ? (
+      {/* {loading ? (
         <Box
           sx={{
             backgroundColor: "#F1FFE7",
@@ -198,87 +213,87 @@ const Unresolved = () => {
         >
           <CircularProgress />
         </Box>
-      ) : (
-        <Box
-          sx={{
-            backgroundColor: "#F1FFE7",
+      ) : ( */}
+      <Box
+        sx={{
+          backgroundColor: "#F1FFE7",
 
-            height: "auto",
-            ml: { xs: "0", md: "230px" },
-          }}
-        >
-          <Box sx={{ padding: "4%", paddingTop: "6%" }}>
+          height: "auto",
+          ml: { xs: "0", md: "230px" },
+        }}
+      >
+        <Box sx={{ padding: "4%", paddingTop: "6%" }}>
+          <Box
+            sx={{
+              backgroundColor: "white",
+              minHeight: "70vh",
+              borderRadius: "8px",
+              p: 5,
+            }}
+          >
             <Box
               sx={{
-                backgroundColor: "white",
-                minHeight: "70vh",
-                borderRadius: "8px",
-                p: 5,
+                display: "flex",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  flexWrap: "wrap",
-                }}
-              >
-                <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
-                  Unresolved Issues
-                </Typography>
-                <Box>
-                  <Button
-                    variant="contained"
-                    disabled={resolve || selectedCheckbox.length < 1}
-                    startIcon={
-                      resolve ? (
-                        <CircularProgress size={15} />
-                      ) : (
-                        <ThumbUpSharp />
-                      )
-                    }
-                    sx={{
-                      backgroundColor: "#528265",
+              <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
+                Unresolved Issues
+              </Typography>
+              <Box>
+                <Button
+                  variant="contained"
+                  disabled={resolve || selectedCheckbox.length < 1}
+                  startIcon={
+                    resolve ? <CircularProgress size={15} /> : <ThumbUpSharp />
+                  }
+                  sx={{
+                    backgroundColor: "#528265",
 
-                      "&:hover": {
-                        background: "#528265",
-                      },
-                    }}
-                    onClick={resolveReports}
-                  >
-                    Resolve selected
-                  </Button>
-                  <Button
-                    sx={{ ml: { xs: 0, md: 2 }, mt: { xs: 2, md: 0 } }}
-                    variant="contained"
-                    color="error"
-                    disabled={deleted || selectedCheckbox.length < 1}
-                    startIcon={
-                      deleted ? <CircularProgress size={15} /> : <Delete />
-                    }
-                    onClick={deleteReports}
-                  >
-                    Delete selected
-                  </Button>
-                </Box>
+                    "&:hover": {
+                      background: "#528265",
+                    },
+                  }}
+                  onClick={resolveReports}
+                >
+                  Resolve selected
+                </Button>
+                <Button
+                  sx={{ ml: { xs: 0, md: 2 }, mt: { xs: 2, md: 0 } }}
+                  variant="contained"
+                  color="error"
+                  disabled={deleted || selectedCheckbox.length < 1}
+                  startIcon={
+                    deleted ? <CircularProgress size={15} /> : <Delete />
+                  }
+                  onClick={deleteReports}
+                >
+                  Delete selected
+                </Button>
               </Box>
+            </Box>
 
-              <Box sx={{ height: "68vh", width: "100%", mt: 2 }}>
-                <DataGrid
-                  getRowId={(row) => row.id}
-                  rows={rows}
-                  checkboxSelection
-                  columns={columns}
-                  pageSize={10}
-                  rowsPerPageOptions={[5, 10, 15]}
-                  disableSelectionOnClick
-                  onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                />
-              </Box>
+            <Box sx={{ height: "68vh", width: "100%", mt: 2 }}>
+              <DataGrid
+                getRowId={(row) => row.id}
+                rows={rows}
+                checkboxSelection
+                rowCount={totalRows}
+                columns={columns}
+                disableSelectionOnClick
+                pagination
+                paginationMode="server"
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
+                loading={loading}
+                onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+              />
             </Box>
           </Box>
         </Box>
-      )}
+      </Box>
+      {/* )} */}
     </>
   );
 };

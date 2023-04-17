@@ -56,18 +56,33 @@ const columns = [
 ];
 const History = () => {
   const [reported, setReported] = useState([]);
+  const [totalRows, setTotalRows] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const { getCurrentToken } = AuthService;
-  const rows = reported;
+  const [page, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const handlePageChange = (params) => {
+    setLoading(true);
+    setCurrentPage(params);
+  };
+  const rows = reported;
+
   const fetchReports = async () => {
     try {
       const response = await api.get("/reports/", {
         headers: {
           Authorization: `token ${getCurrentToken()}`,
         },
+        params: {
+          q: page + 1,
+        },
       });
 
-      if (response) setReported(response.data.results);
+      if (response) {
+        setReported(response.data.results);
+        setTotalRows(response.data.count);
+      }
 
       setLoading(false);
     } catch (error) {
@@ -81,11 +96,11 @@ const History = () => {
   };
   useEffect(() => {
     fetchReports();
-  }, []);
+  }, [page]);
 
   return (
     <>
-      {loading ? (
+      {/* {loading ? (
         <Box
           sx={{
             backgroundColor: "#F1FFE7",
@@ -98,41 +113,45 @@ const History = () => {
         >
           <CircularProgress />
         </Box>
-      ) : (
-        <Box
-          sx={{
-            backgroundColor: "#F1FFE7",
+      ) : ( */}
+      <Box
+        sx={{
+          backgroundColor: "#F1FFE7",
 
-            height: "auto",
-            ml: { xs: "0", md: "230px" },
-          }}
-        >
-          <Box sx={{ padding: "4%", paddingTop: "6%" }}>
-            <Box
-              sx={{
-                backgroundColor: "white",
-                height: "auto",
-                borderRadius: "8px",
-                p: 5,
-              }}
+          height: "auto",
+          ml: { xs: "0", md: "230px" },
+        }}
+      >
+        <Box sx={{ padding: "4%", paddingTop: "6%" }}>
+          <Box
+            sx={{
+              backgroundColor: "white",
+              height: "auto",
+              borderRadius: "8px",
+              p: 5,
+            }}
+          >
+            <Typography
+              sx={{ fontWeight: "700", fontSize: "15px", cursor: "pointer" }}
             >
-              <Typography
-                sx={{ fontWeight: "700", fontSize: "15px", cursor: "pointer" }}
-              >
-                History
-              </Typography>
-              <Box sx={{ display: { xs: "", md: "flex" } }}>
-                <Box sx={{ height: "68vh", width: { xs: "100%" }, mt: 2 }}>
-                  <DataGrid
-                    getRowId={(row) => row.id}
-                    rows={rows}
-                    columns={columns}
-                    pageSize={10}
-                    rowsPerPageOptions={[5]}
-                    disableSelectionOnClick
-                  />
-                </Box>{" "}
-                {/* <Box
+              History
+            </Typography>
+            <Box sx={{ display: { xs: "", md: "flex" } }}>
+              <Box sx={{ height: "68vh", width: { xs: "100%" }, mt: 2 }}>
+                <DataGrid
+                  getRowId={(row) => row.id}
+                  rows={reported}
+                  rowCount={totalRows}
+                  columns={columns}
+                  disableSelectionOnClick
+                  pagination
+                  paginationMode="server"
+                  pageSize={pageSize}
+                  onPageChange={handlePageChange}
+                  loading={loading}
+                />
+              </Box>{" "}
+              {/* <Box
                 sx={{
                   height: "auto",
                   width: { xs: "100%", md: "50%" },
@@ -202,11 +221,11 @@ const History = () => {
                   <Pie data={chartData} />
                 </Box>
               </Box> */}
-              </Box>
             </Box>
           </Box>
         </Box>
-      )}
+      </Box>
+      {/* )} */}
     </>
   );
 };

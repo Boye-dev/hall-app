@@ -74,10 +74,18 @@ const columns = [
 ];
 const Unresolved = () => {
   const [unresolved, setUnresolved] = useState([]);
+  const [totalRows, setTotalRows] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const { getCurrentToken } = AuthService;
+  const [page, setCurrentPage] = useState(0);
+  const [loading, setLoading] = useState(true);
   const { setIsSnackOpen, setSnackMessage, setSnackColor } =
     useContext(ExeatContext);
-  const [loading, setLoading] = useState(true);
+  const handlePageChange = (params) => {
+    setLoading(true);
+    setCurrentPage(params);
+  };
+
   const [deleted, setDeleted] = useState(false);
   const [resolve, setResolve] = useState(false);
   const [selectedCheckbox, setSelected] = useState([]);
@@ -162,13 +170,18 @@ const Unresolved = () => {
         headers: {
           Authorization: `token ${getCurrentToken()}`,
         },
+        params: {
+          q: page + 1,
+        },
       });
 
-      if (response)
+      if (response) {
+        setTotalRows(response.data.count);
+
         setUnresolved(
           response.data.results.filter((item) => item.resolved === false)
         );
-
+      }
       setLoading(false);
     } catch (error) {
       if (error.response) {
@@ -181,11 +194,11 @@ const Unresolved = () => {
   };
   useEffect(() => {
     fetchReports();
-  }, [refetch]);
+  }, [refetch, page]);
   const rows = unresolved;
   return (
     <>
-      {loading ? (
+      {/* {loading ? (
         <Box
           sx={{
             backgroundColor: "#F1FFE7",
@@ -198,46 +211,50 @@ const Unresolved = () => {
         >
           <CircularProgress />
         </Box>
-      ) : (
-        <Box
-          sx={{
-            backgroundColor: "#F1FFE7",
-            pb: 10,
-            height: "auto",
-            ml: { xs: "0", md: "230px" },
-          }}
-        >
-          <Box sx={{ padding: "4%", paddingTop: "6%" }}>
-            <Box
-              sx={{
-                backgroundColor: "white",
-                height: "70vh",
-                borderRadius: "8px",
-                p: 5,
-              }}
-            >
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
-                  Unresolved Issues
-                </Typography>
-              </Box>
+      ) : ( */}
+      <Box
+        sx={{
+          backgroundColor: "#F1FFE7",
+          pb: 10,
+          height: "auto",
+          ml: { xs: "0", md: "230px" },
+        }}
+      >
+        <Box sx={{ padding: "4%", paddingTop: "6%" }}>
+          <Box
+            sx={{
+              backgroundColor: "white",
+              height: "70vh",
+              borderRadius: "8px",
+              p: 5,
+            }}
+          >
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
+                Unresolved Issues
+              </Typography>
+            </Box>
 
-              <Box sx={{ height: "68vh", width: "100%", mt: 2 }}>
-                <DataGrid
-                  getRowId={(row) => row.id}
-                  rows={rows}
-                  // checkboxSelection
-                  columns={columns}
-                  pageSize={10}
-                  rowsPerPageOptions={[5, 10, 15]}
-                  disableSelectionOnClick
-                  onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                />
-              </Box>
+            <Box sx={{ height: "68vh", width: "100%", mt: 2 }}>
+              <DataGrid
+                getRowId={(row) => row.id}
+                rows={rows}
+                // checkboxSelection
+                columns={columns}
+                rowCount={totalRows}
+                disableSelectionOnClick
+                pagination
+                paginationMode="server"
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
+                loading={loading}
+                onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+              />
             </Box>
           </Box>
         </Box>
-      )}
+      </Box>
+      {/* )} */}
     </>
   );
 };

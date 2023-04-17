@@ -42,12 +42,22 @@ const columns = [
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [openCategory, setOpenCategory] = useState(false);
-  const { getCurrentToken } = AuthService;
+
   const [create, setCreate] = useState(false);
 
   const [refetch, setRefectch] = useState(false);
 
+  const [totalRows, setTotalRows] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const { getCurrentToken } = AuthService;
+  const [page, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const handlePageChange = (params) => {
+    setLoading(true);
+    setCurrentPage(params);
+  };
+
   const [selectedCheckbox, setSelected] = useState([]);
   const [deleted, setDeleted] = useState(false);
 
@@ -141,10 +151,15 @@ const Users = () => {
         headers: {
           Authorization: `token ${getCurrentToken()}`,
         },
+        params: {
+          q: page + 1,
+        },
       });
 
-      if (response) setUsers(response.data.results);
-
+      if (response) {
+        setUsers(response.data.results);
+        setTotalRows(response.data.count);
+      }
       setLoading(false);
     } catch (error) {
       if (error.response) {
@@ -157,7 +172,7 @@ const Users = () => {
   };
   useEffect(() => {
     fetchReports();
-  }, [refetch]);
+  }, [refetch, page]);
   const rows = users;
   return (
     <>
@@ -238,10 +253,14 @@ const Users = () => {
                   getRowId={(row) => row.id}
                   rows={rows}
                   checkboxSelection
+                  rowCount={totalRows}
                   columns={columns}
-                  pageSize={10}
-                  rowsPerPageOptions={[5, 10, 15]}
                   disableSelectionOnClick
+                  pagination
+                  paginationMode="server"
+                  pageSize={pageSize}
+                  onPageChange={handlePageChange}
+                  loading={loading}
                   onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
                 />
               </Box>

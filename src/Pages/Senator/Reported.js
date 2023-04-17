@@ -86,18 +86,17 @@ const Reported = () => {
 
   const handlePageChange = (params) => {
     setLoading(true);
-    if (params >= Math.ceil(totalRows / pageSize) - 1) {
-      setCurrentPage(Math.ceil(totalRows / pageSize) - 1);
-    } else {
-      setCurrentPage(params);
-    }
+    setCurrentPage(params);
   };
 
   const fetchReports = async () => {
     try {
-      const response = await api.get(`/reports/?q=${page + 1}`, {
+      const response = await api.get(`/reports/`, {
         headers: {
           Authorization: `token ${getCurrentToken()}`,
+        },
+        params: {
+          q: page + 1,
         },
       });
 
@@ -124,7 +123,7 @@ const Reported = () => {
 
   return (
     <>
-      {loading ? (
+      {/* {loading ? (
         <Box
           sx={{
             backgroundColor: "#F1FFE7",
@@ -137,44 +136,45 @@ const Reported = () => {
         >
           <CircularProgress />
         </Box>
-      ) : (
-        <Box
-          sx={{
-            backgroundColor: "#F1FFE7",
-            pb: 10,
-            height: "auto",
-            ml: { xs: "0", md: "230px" },
-          }}
-        >
-          <Box sx={{ padding: "4%", paddingTop: "6%" }}>
-            <Box
-              sx={{
-                backgroundColor: "white",
-                height: "70vh",
-                borderRadius: "8px",
-                p: 5,
-              }}
-            >
-              <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
-                Reported Issues
-              </Typography>
-              <Box sx={{ height: "68vh", width: "100%", mt: 2 }}>
-                <DataGrid
-                  getRowId={(row) => row.id}
-                  rowCount={totalRows}
-                  pagination
-                  rows={reported}
-                  columns={columns}
-                  pageSize={pageSize}
-                  onPageChange={handlePageChange}
-                  disableSelectionOnClick
-                  paginationMode="server"
-                />
-              </Box>
+      ) : ( */}
+      <Box
+        sx={{
+          backgroundColor: "#F1FFE7",
+          pb: 10,
+          height: "auto",
+          ml: { xs: "0", md: "230px" },
+        }}
+      >
+        <Box sx={{ padding: "4%", paddingTop: "6%" }}>
+          <Box
+            sx={{
+              backgroundColor: "white",
+              height: "70vh",
+              borderRadius: "8px",
+              p: 5,
+            }}
+          >
+            <Typography sx={{ fontWeight: "600", fontSize: "20px" }}>
+              Reported Issues
+            </Typography>
+            <Box sx={{ height: "68vh", width: "100%", mt: 2 }}>
+              <DataGrid
+                getRowId={(row) => row.id}
+                rows={reported}
+                rowCount={totalRows}
+                columns={columns}
+                disableSelectionOnClick
+                pagination
+                paginationMode="server"
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
+                loading={loading}
+              />
             </Box>
           </Box>
         </Box>
-      )}
+      </Box>
+      {/* )} */}
     </>
   );
 };

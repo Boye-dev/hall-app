@@ -107,7 +107,7 @@ const Sidebar = (props) => {
     setAnchorEl(null);
   };
   const handleLogout = async () => {
-    const res = await api.post("/account/logout/", [], {
+    const res = await api.post("/account/logout/", null, {
       headers: {
         Authorization: `token ${getCurrentToken()}`,
       },
